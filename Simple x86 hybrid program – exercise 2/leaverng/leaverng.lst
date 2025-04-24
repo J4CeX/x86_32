@@ -1,0 +1,42 @@
+     1                                  section .text
+     2                                  global leaverng
+     3                                  
+     4                                  leaverng:
+     5                                      ; prologue
+     6 00000000 55                          push ebp
+     7 00000001 89E5                        mov ebp, esp
+     8 00000003 53                          push ebx
+     9                                  
+    10 00000004 8B5508                      mov edx, [ebp+8]
+    11 00000007 89D1                        mov ecx, edx
+    12 00000009 8A5D0C                      mov bl, [ebp+12]
+    13 0000000C 8A7D10                      mov bh, [ebp+16]
+    14                                  
+    15                                  nextchar:
+    16 0000000F 8A02                        mov al, [edx]
+    17 00000011 42                          inc edx
+    18                                  
+    19 00000012 84C0                        test al, al
+    20 00000014 740F                        jz done
+    21                                  
+    22 00000016 38D8                        cmp al, bl
+    23 00000018 7C09                        jl skipchar
+    24                                  
+    25 0000001A 38F8                        cmp al, bh
+    26 0000001C 7F05                        jg skipchar
+    27                                  
+    28 0000001E 8801                        mov [ecx], al
+    29 00000020 41                          inc ecx
+    30                                  
+    31 00000021 EBEC                        jmp nextchar
+    32                                  
+    33                                  skipchar:
+    34 00000023 EBEA                        jmp nextchar
+    35                                  
+    36                                  done:
+    37 00000025 C60100                      mov byte [ecx], 0
+    38                                      ; epilogue
+    39 00000028 8B4508                      mov eax, [ebp+8]
+    40 0000002B 5B                          pop ebx
+    41 0000002C 5D                          pop ebp
+    42 0000002D C3                          ret
