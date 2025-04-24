@@ -1,0 +1,62 @@
+     1                                  section .text
+     2                                  global remrep
+     3                                  
+     4                                  remrep:
+     5                                      ; prologue
+     6 00000000 55                          push ebp
+     7 00000001 89E5                        mov ebp, esp
+     8 00000003 53                          push ebx
+     9 00000004 56                          push esi
+    10                                  
+    11 00000005 8B5508                      mov edx, [ebp + 8]
+    12 00000008 89D1                        mov ecx, edx
+    13 0000000A BE00000000                  mov esi, 0
+    14                                  
+    15                                  nextchar:
+    16 0000000F 8A02                        mov al, [edx]
+    17 00000011 42                          inc edx
+    18                                  
+    19 00000012 84C0                        test al, al
+    20 00000014 7426                        jz done
+    21                                  
+    22 00000016 88C3                        mov bl, al
+    23 00000018 8801                        mov [ecx], al
+    24 0000001A 41                          inc ecx
+    25                                  
+    26 0000001B EB00                        jmp remchars
+    27                                  
+    28                                  remchars:
+    29 0000001D 8A02                        mov al, [edx]
+    30 0000001F 42                          inc edx
+    31                                  
+    32 00000020 84C0                        test al, al
+    33 00000022 740B                        jz setstring
+    34                                  
+    35 00000024 38D8                        cmp al, bl
+    36 00000026 7502                        jne savechar
+    37                                  
+    38 00000028 EBF3                        jmp remchars
+    39                                  
+    40                                  savechar:
+    41 0000002A 8801                        mov [ecx], al
+    42 0000002C 41                          inc ecx
+    43 0000002D EBEE                        jmp remchars
+    44                                  
+    45                                  setstring:
+    46 0000002F 46                          inc esi
+    47 00000030 C60100                      mov byte [ecx], 0
+    48 00000033 8B5508                      mov edx, [ebp+8]
+    49 00000036 01F2                        add edx, esi
+    50 00000038 89D1                        mov ecx, edx
+    51 0000003A EBD3                        jmp nextchar
+    52                                  
+    53                                  done:
+    54                                  
+    55 0000003C C60100                      mov byte [ecx], 0
+    56 0000003F 8B4508                      mov eax, [ebp+8]
+    57                                  
+    58                                      ; epilogue
+    59 00000042 5E                          pop esi
+    60 00000043 5B                          pop ebx
+    61 00000044 5D                          pop ebp
+    62 00000045 C3                          ret
