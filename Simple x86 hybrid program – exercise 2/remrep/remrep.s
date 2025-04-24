@@ -8,9 +8,9 @@ remrep:
     push ebx
     push esi
 
-    mov edx, [ebp + 8]
-    mov ecx, edx
-    mov esi, 0
+    mov edx, [ebp + 8]  ; edx - reading pointer
+    mov ecx, edx        ; ecx - saving pointer
+    mov esi, 0          ; esi - byte shifter
 
 nextchar:
     mov al, [edx]
@@ -19,8 +19,8 @@ nextchar:
     test al, al
     jz done
 
-    mov bl, al
-    mov [ecx], al
+    mov bl, al          ; bl - current character to ignore its duplicates
+    mov [ecx], al       ; saving one copy of current character
     inc ecx
 
     jmp remchars
@@ -30,10 +30,10 @@ remchars:
     inc edx
 
     test al, al
-    jz setstring
+    jz setstring        ; if removing duplicates is done, set new edited string
 
     cmp al, bl
-    jne savechar
+    jne savechar        ; if current character is not a duplicate of given character to remove, save it
 
     jmp remchars
 
@@ -43,10 +43,10 @@ savechar:
     jmp remchars
 
 setstring:
-    inc esi
-    mov byte [ecx], 0
-    mov edx, [ebp+8]
-    add edx, esi
+    inc esi             ; increase byte shift
+    mov byte [ecx], 0   ; add NULL character to the end of the modified string
+    mov edx, [ebp+8]    ; set edx on the begining of the modified string
+    add edx, esi        ; add the esi to the edx, it will prevent program from removing already set in right place characters
     mov ecx, edx
     jmp nextchar
 
