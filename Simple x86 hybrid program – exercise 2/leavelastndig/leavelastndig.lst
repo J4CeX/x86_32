@@ -1,0 +1,77 @@
+     1                                  section .text
+     2                                  global leavelastndig
+     3                                  
+     4                                  leavelastndig:
+     5                                      ;prologue
+     6 00000000 55                          push ebp
+     7 00000001 89E5                        mov ebp, esp
+     8 00000003 53                          push ebx
+     9 00000004 56                          push esi
+    10                                  
+    11 00000005 8B5508                      mov edx, [ebp+8]
+    12 00000008 89D1                        mov ecx, edx
+    13 0000000A 8B5D0C                      mov ebx, [ebp+12]
+    14 0000000D BE00000000                  mov esi, 0
+    15                                  
+    16                                  remchars:
+    17 00000012 8A02                        mov al, [edx]
+    18 00000014 42                          inc edx
+    19                                  
+    20 00000015 84C0                        test al, al
+    21 00000017 740E                        jz resetregisters
+    22                                  
+    23 00000019 3C30                        cmp al, '0'
+    24 0000001B 7CF5                        jl  remchars
+    25                                  
+    26 0000001D 3C39                        cmp al, '9'
+    27 0000001F 7FF1                        jg  remchars
+    28                                  
+    29 00000021 8801                        mov [ecx], al
+    30 00000023 41                          inc ecx
+    31 00000024 46                          inc esi
+    32 00000025 EBEB                        jmp remchars
+    33                                  
+    34                                  resetregisters:
+    35 00000027 39DE                        cmp esi, ebx
+    36 00000029 7C1B                        jl output
+    37 0000002B 29DE                        sub esi, ebx
+    38 0000002D C60100                      mov byte [ecx], 0
+    39 00000030 8B5508                      mov edx, [ebp+8]
+    40 00000033 89D1                        mov ecx, edx
+    41 00000035 EB00                        jmp remdigits
+    42                                  
+    43                                  remdigits:
+    44 00000037 8A02                        mov al, [edx]
+    45 00000039 42                          inc edx
+    46                                  
+    47 0000003A 84C0                        test al, al
+    48 0000003C 7408                        jz output
+    49                                  
+    50 0000003E 83FE00                      cmp esi, 0
+    51 00000041 7403                        je output
+    52                                  
+    53 00000043 4E                          dec esi
+    54 00000044 EBF1                        jmp remdigits
+    55                                  
+    56                                  output:
+    57 00000046 8801                        mov [ecx], al
+    58 00000048 41                          inc ecx
+    59                                  
+    60 00000049 8A02                        mov al, [edx]
+    61 0000004B 42                          inc edx
+    62                                  
+    63 0000004C 84C0                        test al, al
+    64 0000004E 7402                        jz done
+    65                                  
+    66 00000050 EBF4                        jmp output
+    67                                  
+    68                                  done:
+    69                                      ;epilogue
+    70 00000052 C60100                      mov byte [ecx], 0
+    71 00000055 8B4508                      mov eax, [ebp + 8]
+    72 00000058 5E                          pop esi
+    73 00000059 5B                          pop ebx
+    74 0000005A 5D                          pop ebp
+    75 0000005B C3                          ret
+    76                                  
+    77                                  
