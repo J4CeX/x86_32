@@ -1,0 +1,31 @@
+     1                                      section .text
+     2                                      global rmspc
+     3                                  
+     4                                  rmspc:
+     5 00000000 55                          push ebp
+     6 00000001 89E5                        mov ebp, esp
+     7                                  
+     8                                      ; here will be function
+     9                                  ; edx - source pointer
+    10                                  ; ecx - destination pointer
+    11 00000003 8B5508                      mov edx, [ebp + 8]
+    12 00000006 89D1                        mov ecx, edx
+    13                                  
+    14                                  loop:
+    15 00000008 8A02                        mov al, [edx]
+    16 0000000A 42                          inc edx
+    17                                  
+    18                                      ; compare to whitespace
+    19 0000000B 3C20                        cmp al, ' '
+    20 0000000D 74F9                        jz loop
+    21                                  
+    22 0000000F 8801                        mov [ecx], al
+    23 00000011 41                          inc ecx
+    24                                  
+    25 00000012 84C0                        test al, al
+    26 00000014 75F2                        jnz loop
+    27                                  
+    28 00000016 8B4508                      mov eax, [ebp + 8]
+    29                                  
+    30 00000019 5D                          pop ebp
+    31 0000001A C3                          ret
