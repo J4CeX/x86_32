@@ -14,24 +14,24 @@
     14 0000000A 42                          inc edx
     15                                  
     16 0000000B 84C0                        test al, al
-    17 0000000D 740F                        jz done
+    17 0000000D 7411                        jz done
     18                                  
-    19 0000000F 3C67                        cmp al, 'g'
-    20 00000011 7C06                        jl savechar
+    19 0000000F 3A450C                      cmp al, [ebp + 12]
+    20 00000012 7C07                        jl savechar
     21                                  
-    22 00000013 3C6C                        cmp al, 'l'
-    23 00000015 7F02                        jg savechar
+    22 00000014 3A4510                      cmp al, [ebp + 16]
+    23 00000017 7F02                        jg savechar
     24                                  
     25                                  
-    26 00000017 EBEF                        jmp nextchar
+    26 00000019 EBED                        jmp nextchar
     27                                  
     28                                  savechar:
-    29 00000019 8801                        mov [ecx], al
-    30 0000001B 41                          inc ecx
-    31 0000001C EBEA                        jmp nextchar
+    29 0000001B 8801                        mov [ecx], al
+    30 0000001D 41                          inc ecx
+    31 0000001E EBE8                        jmp nextchar
     32                                  
     33                                  done:
-    34 0000001E C60100                      mov byte [ecx], 0
-    35 00000021 8B4508                      mov eax, [ebp + 8]
-    36 00000024 5D                          pop ebp
-    37 00000025 C3                          ret
+    34 00000020 C60100                      mov byte [ecx], 0
+    35 00000023 8B4508                      mov eax, [ebp + 8]
+    36 00000026 5D                          pop ebp
+    37 00000027 C3                          ret

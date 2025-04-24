@@ -16,10 +16,10 @@ nextchar:
     test al, al
     jz done
 
-    cmp al, 'g'
+    cmp al, [ebp + 12]
     jl savechar
 
-    cmp al, 'l'
+    cmp al, [ebp + 16]
     jg savechar
 
 
